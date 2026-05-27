@@ -1,0 +1,40 @@
+CODECONNECT & HOLY AI - DISTRIBUTED VIVA SETUP GUIDE
+====================================================
+
+This guide explains how to connect Devank's CodeConnect Java Application (Client) to your local Ollama Phi-3 AI Model (Server) over a local network (Wi-Fi or Mobile Hotspot).
+
+STEP 1: NETWORK CONNECTION (BOTH LAPTOPS)
+----------------------------------------------------
+1. Turn on your phone's Mobile Hotspot.
+2. Connect BOTH your laptop and Devank's laptop to this hotspot.
+
+STEP 2: START THE AI SERVER (YOUR LAPTOP)
+----------------------------------------------------
+By default, Ollama only listens to your own laptop (127.0.0.1). We need to bind it to 0.0.0.0 so Devank's laptop can talk to it.
+
+1. Close the Ollama background app: 
+   - Look at the System Tray (bottom right corner near the clock).
+   - Right-click the Ollama icon and click "Quit Ollama".
+   
+2. Find your IP Address:
+   - Open Command Prompt (cmd).
+   - Type `ipconfig` and press Enter.
+   - Look for the "IPv4 Address" under your Wireless LAN adapter (e.g., 192.168.43.15).
+   - Write this number down! Devank will need it.
+
+3. Bind and Start Ollama:
+   - Open a NEW Command Prompt (cmd).
+   - Type: `set OLLAMA_HOST=0.0.0.0` and press Enter.
+   - Type: `ollama serve` and press Enter.
+   - You should see "Listening on [::]:11434" and it should detect your RTX 3050 GPU.
+   - LEAVE THIS WINDOW OPEN during the Viva!
+
+STEP 3: CONNECT THE CLIENT (DEVANK'S LAPTOP)
+----------------------------------------------------
+1. Devank pulls the latest code from GitHub.
+2. In the CodeConnect configuration (or UniversalAIProvider.java), locate the AI URL string.
+3. Change the URL to point to your IP address and the Ollama port (11434).
+   - Example: http://192.168.43.15:11434/api/generate
+4. Devank compiles and runs CodeConnect using his Maven setup.
+
+When Devank asks the AI Assistant a question, his laptop will send the request over the hotspot to your laptop. Your RTX 3050 GPU will process it via Phi-3, and send the answer back to Devank's screen!

@@ -8,7 +8,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         
         System.out.println("==================================================");
-        System.out.println("🤖 Advanced AI Assistant Started (Memory + RAG + RL)");
+        System.out.println("🤖 Advanced AI Assistant Started (Memory + RAG + RL + Tools)");
         System.out.println("Type 'exit' to quit.");
         System.out.println("==================================================");
 
@@ -39,6 +39,22 @@ public class Main {
 
             System.out.println("\nAI is thinking...");
             String response = assistant.ask(userInput);
+            
+            while (response.startsWith("[TOOL_REQUEST]")) {
+                String toolJson = response.replace("[TOOL_REQUEST]", "").trim();
+                System.out.println("\n⚠️ [SECURITY] HolyAI wants to execute a tool:");
+                System.out.println(toolJson);
+                System.out.print("Allow execution? (y/n): ");
+                
+                String permission = scanner.nextLine().trim();
+                System.out.println("Executing... waiting for AI to analyze results...");
+                if (permission.equalsIgnoreCase("y")) {
+                    response = assistant.executeToolAndContinue(toolJson);
+                } else {
+                    response = assistant.denyToolAndContinue();
+                }
+            }
+
             System.out.println("\n=== AI RESPONSE ===");
             System.out.println(response);
             System.out.println("===================");
